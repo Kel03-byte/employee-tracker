@@ -1,7 +1,7 @@
 require('dotenv').config();
-const inquirer = require('./node_modules/inquirer/lib/inquirer')
-const mysql = require('mysql2/promise')
-const cTable = require('console.table')
+const inquirer = require('./node_modules/inquirer/lib/inquirer');
+const mysql = require('mysql2/promise');
+const cTable = require('console.table');
 
 // Establishes a connection to the database
 const connection = mysql.createConnection({
@@ -23,7 +23,6 @@ const questions = (connection) => {
                 choices: ['View', 'Add', 'Update', 'Delete', 'Quit']
             },
         ])
-
         .then((response) => {
             switch (response.mainResponse) {
                 case 'View':
@@ -37,7 +36,7 @@ const questions = (connection) => {
             }
             switch (response.mainResponse) {
                 case 'Update':
-                    updateDatabasePrompt(connection)
+                    updateDatabasesPrompt(connection)
                     break;
             }
             switch (response.mainResponse) {
@@ -51,7 +50,7 @@ const questions = (connection) => {
                     break;
             }
         });
-}
+};
 
 // Function to view the databases (Employee, Role and Department)
 function viewDatabasesPrompt(connection) {
@@ -92,7 +91,7 @@ function viewDatabasesPrompt(connection) {
             if (response.databases === 'Go Back') {
                 questions(connection)
             };
-        })
+        });
 };
 
 // Function to start adding a new Employee, Role or Department
@@ -127,7 +126,7 @@ function addToDatabasesPrompt(connection) {
                     break;
             }
         })
-}
+};
 
 // Function to add a new Employee
 function addEmployeePrompt(connection) {
@@ -173,7 +172,7 @@ function addEmployeePrompt(connection) {
                 console.error("Wasn't able to add a new employee!", error.message)
             })
         })
-}
+};
 
 // Function to add a new Role
 function addNewRolePrompt(connection) {
@@ -211,8 +210,8 @@ function addNewRolePrompt(connection) {
             }).catch(error => {
                 console.error("Wasn't able to add a new role!", error.message)
             })
-        })
-}
+        });
+};
 
 // function to add a new Department
 function addNewDepartmentPrompt(connection) {
@@ -234,18 +233,18 @@ function addNewDepartmentPrompt(connection) {
             }).catch(error => {
                 console.error("Wasn't able to add a new department!", error.message)
             })
-        })
-}
+        });
+};
 
 // Function to start updating an Employee's Role or Manager
-function updateDatabasePrompt(connection) {
+function updateDatabasesPrompt(connection) {
     inquirer
         .prompt([
             {
                 type: 'list',
                 message: `What part of the Employee deatails would you like to Update?`,
                 name: 'updating',
-                choices: ['Role', 'Manager', 'Go Back']
+                choices: ['First Name', 'Last Name', 'Role', 'Manager', 'Go Back']
             }
         ])
         .then((response) => {
@@ -254,18 +253,81 @@ function updateDatabasePrompt(connection) {
                     updateEmployeeRole(connection)
                     break;
             }
-            switch (response.adding) {
-                case 'Manager':
-                updateEmployeeManager(connection)
+            switch (response.updating) {
+                case 'First Name':
+                    updateEmployeeFirstName(connection)
                     break;
             }
-            switch (response.adding) {
+            switch (response.updating) {
+                case 'Last Name':
+                    updateEmployeeLastName(connection)
+                    break;
+            }
+            switch (response.updating) {
+                case 'Manager':
+                    updateEmployeeManager(connection)
+                    break;
+            }
+            switch (response.updating) {
                 case 'Go Back':
                     questions(connection)
                     break;
             }
-        })
-}
+        });
+};
+
+// Function to update Employee's First Name
+function updateEmployeeFirstName(connection) {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: `What is the Id of the Employee you would like to update?`,
+                name: 'employeeId'
+            },
+            {
+                type: 'input',
+                message: `What is the First Name you would like to update the Employee to?`,
+                name: 'firstName'
+            },
+        ])
+        .then((employeeDetails) => {
+            let { firstName, employeeId } = employeeDetails
+            connection.query('update employee set ? where ?',
+                [{ first_name: firstName }, { id: employeeId }]).then(() => {
+                    console.log(`The Employee's first name has been updated!\n`)
+                    updateDatabasesPrompt(connection)
+                }).catch(error => {
+                    console.error("Wasn't able to update the database!", error.message)
+                })
+        });
+};
+
+function updateEmployeeLastName(connection) {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                message: `What is the Id of the Employee you would like to update?`,
+                name: 'employeeId'
+            },
+            {
+                type: 'input',
+                message: `What is the Last Name you would like to update the Employee to?`,
+                name: 'lastName'
+            }
+        ])
+        .then((employeeDetails) => {
+            let { lastName, employeeId } = employeeDetails
+            connection.query('update employee set ? where ?',
+                [{ last_name: lastName }, { id: employeeId }]).then(() => {
+                    console.log(`The Employee's last name has been updated!\n`)
+                    updateDatabasesPrompt(connection)
+                }).catch(error => {
+                    console.error("Wasn't able to update the database!", error.message)
+                })
+        });
+};
 
 // Function to update an Employee's Role
 function updateEmployeeRole(connection) {
@@ -280,23 +342,18 @@ function updateEmployeeRole(connection) {
                 type: 'input',
                 message: `What is the Id of the Role you would like to update the Employee to?`,
                 name: 'roleId'
-            },
-            {
-                type: 'input',
-                message: `What is the Id of the Manger you would like to update the Employee to?\n(Put null if they are the Manager)`,
-                name: 'managerId'
             }
         ])
         .then((roleDetails) => {
             let { roleId, employeeId } = roleDetails
             connection.query('update employee set ? where ?',
                 [{ role_id: roleId }, { id: employeeId }]).then(() => {
-                    console.log(`The employee's role has been updated!\n`)
-                    updateDatabasePrompt(connection)
+                    console.log(`The Employee's Role has been updated!\n`)
+                    updateDatabasesPrompt(connection)
                 }).catch(error => {
                     console.error("Wasn't able to update the database!", error.message)
                 })
-        })
+        });
 };
 
 // Function to update Employee's Manager
@@ -318,12 +375,12 @@ function updateEmployeeManager(connection) {
             let { managerId, employeeId } = managerDetails
             connection.query('update employee set ? where ?',
                 [{ manager_id: managerId }, { id: employeeId }]).then(() => {
-                    console.log(`The employee's manager has been updated!\n`)
-                    updateDatabasePrompt(connection)
+                    console.log(`The Employee's Manager has been updated!\n`)
+                    updateDatabasesPrompt(connection)
                 }).catch(error => {
                     console.error("Wasn't able to update the database!", error.message)
                 })
-        })
+        });
 };
 
 // Function to start deleting an Employee, Role or Department
@@ -357,8 +414,8 @@ function deleteFromDatabasesPrompt(connection) {
                     questions(connection)
                     break;
             }
-        })
-}
+        });
+};
 
 // Function to delete an Employee
 function deleteEmployeePrompt(connection) {
@@ -373,12 +430,12 @@ function deleteEmployeePrompt(connection) {
             const deletedEmployee = deleteDetails.deleteEmployee
             connection.query('delete from employee where ?',
                 { id: deletedEmployee, }).then(() => {
-                    console.log(`An employee was deleted!\n`)
-                    deleteFromDatabasesPrompt(connection)
+                    console.log(`The Employee was deleted!\n`);
+                    deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
-                    console.error("Wasn't able to delete the employee!", error.message)
+                    console.error("Wasn't able to delete the employee!", error.message);
                 })
-        })
+        });
 };
 
 // Function to delete a Role
@@ -394,10 +451,10 @@ function deleteRolePrompt(connection) {
             const deletedRole = deleteDetails.deleteRole
             connection.query('delete from roles where ?',
                 { title: deletedRole, }).then(() => {
-                    console.log(`A role was deleted!\n`)
-                    deleteFromDatabasesPrompt(connection)
+                    console.log(`The Role was deleted!\n`);
+                    deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
-                    console.error("Wasn't able to delete the role!", error.message)
+                    console.error("Wasn't able to delete the role!", error.message);
                 })
         })
 };
@@ -415,17 +472,17 @@ function deleteDepartmentPrompt(connection) {
             const deletedDepartment = deleteDetails.deleteDepartment
             connection.query('delete from department where ?',
                 { department_name: deletedDepartment, }).then(() => {
-                    console.log(`A department was deleted!\n`)
-                    deleteFromDatabasesPrompt(connection)
+                    console.log(`The Department was deleted!\n`);
+                    deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
-                    console.error("Wasn't able to delete the department!", error.message)
+                    console.error("Wasn't able to delete the department!", error.message);
                 })
-        })
+        });
 };
 
 connection.then((con) => {
-    console.log('--- Welcome To Our Employee Tracker ---\n')
-    questions(con)
+    console.log('--- Welcome To The Employee Tracker ---\n');
+    questions(con);
 }).catch(error => {
-    console.log(error.message)
-})
+    console.log(error.message);
+});
