@@ -482,8 +482,8 @@ function deleteDepartmentPrompt(connection) {
             }])
         .then((deleteDetails) => {
             const deletedDepartment = deleteDetails.deleteDepartment
-            connection.query('delete from department where ?',
-                { id: deletedDepartment, }).then(() => {
+            console.log(deletedDepartment)
+            connection.query(`delete from department where id=${deletedDepartment}`,).then(() => {
                     console.log(`The Department was deleted!\n`);
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
@@ -495,7 +495,7 @@ function deleteDepartmentPrompt(connection) {
 
 connection.then((con) => {
     console.log('--- Welcome To The Employee Tracker ---\n');
-    questions(con);
+    deleteDepartmentPrompt(con);
 }).catch(error => {
     console.log(error.message);
 });
