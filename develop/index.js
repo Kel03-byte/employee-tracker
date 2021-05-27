@@ -68,28 +68,31 @@ function viewDatabasesPrompt(connection) {
                 connection.query(`SELECT e.id, e.first_name, e.last_name, roles.title, department_name AS department, roles.salary, concat(m.first_name, ' ' ,  m.last_name) AS manager FROM employee e LEFT JOIN employee m ON e.manager_id = m.id INNER JOIN roles ON e.role_id = roles.id INNER JOIN department ON roles.department_id = department.id order by e.id asc`).then((response) => {
                     console.log('\n')
                     console.table(response[0]);
-                    viewDatabasesPrompt(connection)
+                    viewDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Opps not able to read the Employee database", error.message);
+                    viewDatabasesPrompt(connection);
                 });
             if (response.databases === 'Departments')
                 connection.query(`SELECT * FROM department`).then((response) => {
                     console.log('\n')
                     console.table(response[0]);
-                    viewDatabasesPrompt(connection)
+                    viewDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Opps not able to read the Department database", error.message);
+                    viewDatabasesPrompt(connection);
                 });
             if (response.databases === 'Roles')
                 connection.query(`SELECT * FROM roles`).then((response) => {
                     console.log('\n')
                     console.table(response[0]);
-                    viewDatabasesPrompt(connection)
+                    viewDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Opps not able to read the Roles database", error.message);
+                    viewDatabasesPrompt(connection);
                 });
             if (response.databases === 'Go Back') {
-                questions(connection)
+                questions(connection);
             };
         });
 };
@@ -167,9 +170,10 @@ function addEmployeePrompt(connection) {
                 manager_id: managerId
             }).then(() => {
                 console.log(`${firstName} was added to the employee database!\n`)
-                addToDatabasesPrompt(connection)
+                addToDatabasesPrompt(connection);
             }).catch(error => {
                 console.error("Wasn't able to add a new employee!", error.message)
+                addEmployeePrompt(connection);
             })
         })
 };
@@ -206,9 +210,10 @@ function addNewRolePrompt(connection) {
                 department_id: departmentId,
             }).then(() => {
                 console.log(`${title} was added to the role database!\n`)
-                addToDatabasesPrompt(connection)
+                addToDatabasesPrompt(connection);
             }).catch(error => {
                 console.error("Wasn't able to add a new role!", error.message)
+                addNewRolePrompt(connection);
             })
         });
 };
@@ -229,9 +234,10 @@ function addNewDepartmentPrompt(connection) {
                 department_name: departmentName,
             }).then(() => {
                 console.log(`${departmentName} was added to the department database!\n`)
-                addToDatabasesPrompt(connection)
+                addToDatabasesPrompt(connection);
             }).catch(error => {
                 console.error("Wasn't able to add a new department!", error.message)
+                addNewDepartmentPrompt(connection);
             })
         });
 };
@@ -296,9 +302,10 @@ function updateEmployeeFirstName(connection) {
             connection.query('update employee set ? where ?',
                 [{ first_name: firstName }, { id: employeeId }]).then(() => {
                     console.log(`The Employee's first name has been updated!\n`)
-                    updateDatabasesPrompt(connection)
+                    updateDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Wasn't able to update the database!", error.message)
+                    updateEmployeeFirstName(connection);
                 })
         });
 };
@@ -322,9 +329,10 @@ function updateEmployeeLastName(connection) {
             connection.query('update employee set ? where ?',
                 [{ last_name: lastName }, { id: employeeId }]).then(() => {
                     console.log(`The Employee's last name has been updated!\n`)
-                    updateDatabasesPrompt(connection)
+                    updateDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Wasn't able to update the database!", error.message)
+                    updateEmployeeLastName(connection);
                 })
         });
 };
@@ -349,9 +357,10 @@ function updateEmployeeRole(connection) {
             connection.query('update employee set ? where ?',
                 [{ role_id: roleId }, { id: employeeId }]).then(() => {
                     console.log(`The Employee's Role has been updated!\n`)
-                    updateDatabasesPrompt(connection)
+                    updateDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Wasn't able to update the database!", error.message)
+                    updateEmployeeRole(connection);
                 })
         });
 };
@@ -379,6 +388,7 @@ function updateEmployeeManager(connection) {
                     updateDatabasesPrompt(connection)
                 }).catch(error => {
                     console.error("Wasn't able to update the database!", error.message)
+                    updateEmployeeManager(connection)
                 })
         });
 };
@@ -434,6 +444,7 @@ function deleteEmployeePrompt(connection) {
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Wasn't able to delete the Employee!", error.message);
+                    deleteEmployeePrompt(connection);
                 })
         });
 };
@@ -455,6 +466,7 @@ function deleteRolePrompt(connection) {
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Wasn't able to delete the Role!", error.message);
+                    deleteRolePrompt(connection);
                 })
         })
 };
@@ -476,6 +488,7 @@ function deleteDepartmentPrompt(connection) {
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
                     console.error("Wasn't able to delete the Department!", error.message);
+                    deleteDepartmentPrompt(connection);
                 })
         });
 };
