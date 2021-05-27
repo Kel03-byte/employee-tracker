@@ -399,7 +399,7 @@ function deleteFromDatabasesPrompt(connection) {
         .prompt([
             {
                 type: 'list',
-                message: 'What would you like to delete?',
+                message: 'What would you like to delete?\n(Note: If deleting a Department, then delete any linked Roles beforehand!)',
                 name: 'deleting',
                 choices: ['An Employee', 'A Department', 'A Role', 'Go Back']
             }])
