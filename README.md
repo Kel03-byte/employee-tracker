@@ -3,15 +3,11 @@
 ## Description
 A handy database tool to manage an Employee Database!
 
-## Screenshots
-A screenshot of the Terminal in action!
-
-![image](./assets/screenshot1.png)
-
-
 ## Usage
 This app uses: Inquirer, MYSQL2 and Console.Table
 
-Here is a short video on how to run the app!
+Open your terminal, change into the "Develop" folder, install the dependancies by 'npm install' and then type 'node index.js' ;)
 
-[Video Link!]()
+Here is a short video on how to run the app as well!
+
+[Video Link!](https://drive.google.com/file/d/1acD3tV-zqADi3iSu4lCs_boSEpM7PXsW/view?usp=sharing)
