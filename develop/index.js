@@ -495,7 +495,7 @@ function deleteDepartmentPrompt(connection) {
 
 connection.then((con) => {
     console.log('--- Welcome To The Employee Tracker ---\n');
-    deleteDepartmentPrompt(con);
+    questions(con);
 }).catch(error => {
     console.log(error.message);
 });
