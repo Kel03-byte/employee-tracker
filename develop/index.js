@@ -335,12 +335,12 @@ function updateEmployeeRole(connection) {
         .prompt([
             {
                 type: 'input',
-                message: `What is the Id of the Employee you would like to update?`,
+                message: `What is the ID of the EMPLOYEE you would like to update?`,
                 name: 'employeeId'
             },
             {
                 type: 'input',
-                message: `What is the Id of the Role you would like to update the Employee to?`,
+                message: `What is the ID of the ROLE you would like to update the EMPLOYEE to?`,
                 name: 'roleId'
             }
         ])
@@ -362,12 +362,12 @@ function updateEmployeeManager(connection) {
         .prompt([
             {
                 type: 'input',
-                message: `What is the Id of the Employee you would like to update?`,
+                message: `What is the ID of the EMPLOYEE you would like to update?`,
                 name: 'employeeId'
             },
             {
                 type: 'input',
-                message: `What is the Id of the Manger you would like to update the Employee to?\n(You can put null if they are the Manager)`,
+                message: `What is the ID of the MANAGER you would like to update the EMPLOYEE to?\n(You can put null if they are the Manager)`,
                 name: 'managerId'
             }
         ])
@@ -423,17 +423,17 @@ function deleteEmployeePrompt(connection) {
         .prompt([
             {
                 type: 'input',
-                message: 'What is the id of the Employee would you like to delete?',
+                message: 'What is the ID of the EMPLOYEE you wish to delete?',
                 name: 'deleteEmployee',
             }])
         .then((deleteDetails) => {
             const deletedEmployee = deleteDetails.deleteEmployee
             connection.query('delete from employee where ?',
                 { id: deletedEmployee, }).then(() => {
-                    console.log(`The Employee was deleted!\n`);
+                    console.log(`The Employee file has been deleted!\n`);
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
-                    console.error("Wasn't able to delete the employee!", error.message);
+                    console.error("Wasn't able to delete the Employee!", error.message);
                 })
         });
 };
@@ -444,7 +444,7 @@ function deleteRolePrompt(connection) {
         .prompt([
             {
                 type: 'input',
-                message: 'What Role would you like to delete?\n(This needs to be spelt the same as in the database)',
+                message: 'What is the TITLE of the ROLE would you like to delete?\n(This needs to be spelt the same as in the database)',
                 name: 'deleteRole',
             }])
         .then((deleteDetails) => {
@@ -454,7 +454,7 @@ function deleteRolePrompt(connection) {
                     console.log(`The Role was deleted!\n`);
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
-                    console.error("Wasn't able to delete the role!", error.message);
+                    console.error("Wasn't able to delete the Role!", error.message);
                 })
         })
 };
@@ -465,17 +465,17 @@ function deleteDepartmentPrompt(connection) {
         .prompt([
             {
                 type: 'input',
-                message: 'What Department would you like to delete?\n(This needs to be spelt the same as in the database)',
+                message: 'What is the ID of the DEPARTMENT you wish to delete?',
                 name: 'deleteDepartment',
             }])
         .then((deleteDetails) => {
             const deletedDepartment = deleteDetails.deleteDepartment
             connection.query('delete from department where ?',
-                { department_name: deletedDepartment, }).then(() => {
+                { id: deletedDepartment, }).then(() => {
                     console.log(`The Department was deleted!\n`);
                     deleteFromDatabasesPrompt(connection);
                 }).catch(error => {
-                    console.error("Wasn't able to delete the department!", error.message);
+                    console.error("Wasn't able to delete the Department!", error.message);
                 })
         });
 };
