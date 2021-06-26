@@ -16,18 +16,17 @@ A handy database tool to manage an Employee Database!
 
 This app uses: 
 * Inquirer
-* MYSQL2
+* MYSQL
 * Console.Table
+* DotEnv
 
 ## Installation
 
 * Clone the Repository
+* Open up and login into MYSQL App and copy the sql file to create the Database and Tables needed (this also adds the data needed!)
 * Update .env.EXAMPLE with your own database server password and user name (usually "root" for MYSQL) and then save and rename the file to .env
 * Open up your terminal and change into the cloned folder
 * Type "npm i" to install the dependancies
-* Type "mysql -u root -p" and then enter your MYSQL password
-* Type "source db/schema.sql" to create the database
-* After the database is created type "quit" to exit out of the MYSQL terminal command
 * Then lastly type "npm run watch" to start the server!
 
 Open your terminal, change into the "Develop" folder, install the dependancies by 'npm install' and then type 'node index.js' ;)
