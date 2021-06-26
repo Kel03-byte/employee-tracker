@@ -1,3 +1,6 @@
+--- Deletes the Database if it exists so we can add the updated Database ---
+DROP DATABASE IF EXISTS employee_db;
+
 --- Create and Use the Database ---
 create database employee_db;
 

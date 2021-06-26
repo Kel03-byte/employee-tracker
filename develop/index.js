@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
     database: 'employee_db'
 });
 
-// The beginging questions that estabish what the user wants to do
+// The beginning questions that estabish what the user wants to do
 const questions = (connection) => {
     inquirer
         .prompt([
